@@ -1,11 +1,14 @@
-﻿@* id, password 를 type 하면, type 한 값이 바로 아래 box 에 display 되도록 함 *@
-<p>id, password 를 type 하면, type 한 값이 바로 아래 box 에 display 되도록 함</p>
+﻿
+<h2>(1) id, password 를 type 하면, 바로 아래 textbox 에 display 되도록 함</h2>
 <div id="app1">
+    @* v-model 이라는 attribute 로 userId, userPassword 를 선언하면 --> script 에 있는 변수명과 자동으로 sync 됨 *@
+    @* 입력 받는 data 는 v-model 이라는 attribute 를 사용해서, Vue instance 에 있는 data 와 연결해서 사용 *@
     <input type="text" id="user_id" v-model="userId" />
     <input type="password" id="user_psaaword" v-model="userPassword" />
     <button type="button">Sign In</button>
     <br />
-    @*{{ ... }} 안에 있는 변수명 userId, userPassword 를 script 에 있는 변수명을 일치 시켜주면 입력내용이 display 됨*@
+
+    @* Vue instance 의 data 를 화면에 출력할 때는 {{ 이 속에 넣고... }} *@
     ID: {{ userId }}
     <br />
     PASSWORD: {{ userPassword }}
@@ -13,12 +16,11 @@
 
 <br />
 
-@* image 와 간단한 설명을 ul/li list 로 display *@
-@* v-for loop 사용 *@
-<p>image 와 간단한 설명을 ul/li list 로 display --> v-for loop 사용 </p>
+<h2>(2) image 와 간단한 설명을 list 로 display (v-for loop)</h2>
 <div id="app2">
     <ul style="list-style: none;">
         <li v-for="item in items">
+            @* <attribute 에 변수명 assign 할 때 --> img src= 아니고 --> <img :src= src 앞에 : 붙여서 --> :src 로 사용 *@
             <img :src="item.image">
             <br />
             {{ item.title }}
@@ -29,8 +31,16 @@
 
     @* image 와 간단한 설명을 template tag 를 사용해서 li list 로 display *@
     @* v-for loop 사용 *@
-    <p>image 와 간단한 설명을 template tag 를 사용해서 li list 로 display --> v-for loop 사용 </p>
     <ul style="list-style: none;">
+
+        @*<li v-for="item1 in items">
+            <img :src="item1.image">
+            <br />
+            {{ item1.title }}
+        </li>*@
+
+        @* 위 li v-for 를 아래처럼 template 태그 사용해서 분리 .. 둘 다 가능 *@
+
         <template v-for="item1 in items">
             <li>
                 <img :src="item1.image">
@@ -47,12 +57,13 @@
 
 <br />
 
+<h2>(3) json 형식으로 style 지정(attribute binding)하고 drop down menu </h2>
 <div id="app3">
     @*<img id="'thumbnail_${id}'" :src="image">*@
     @* style 라는 class 이름을 만들고*@
     @* <div :style="style">*@
     @*style, fontStyle 라는 class 만들고, [ ... ] 안에 배열로 지정해도 됨 *@
-    <p>json 형식으로 style 지정하고 drop down menu </p>
+    
     @*<div v-bind:style="[style, fontStyle]"> ---> 원래는 v-bind:id 인데 대개 v-bind 빼고 :id 로 많이 사용*@
     @*<div :style="[style, fontStyle]">*@
     <div :class="[dropdown, toggle]">
@@ -67,7 +78,7 @@
 
 <br />
 
-@* button 과 method 연결 *@
+<h2>(4) method 정의 및 Key Event Handling</h2>
 <div id="app4">
     <button type="button" v-on:click="add">ADD</button>
     {{ counter }}
@@ -77,6 +88,7 @@
 
 <br />
 
+<h2>(5) method 정의 및 Event Handling</h2>
 <div id="app5">
     <button type="button" v-on:click="btnClick">Dropdown-Menu</button>
 
@@ -101,7 +113,8 @@
             return {
                 id: 1,
                 image: 'https://picsum.photos/200/200/?image=353',
-                //json 형식으로 class 이름 style 에 backgroud color, font 크기, font 종류를 지정할 수 있음
+                // json 형식으로 class 이름 style 에 backgroud color, font 크기, font 종류를 지정할 수 있음
+                // style 은 json key 에 항목을 넣고, value 에 설정값을 
                 style: {
                     background: 'red'
                     //fontSize: '36px',
@@ -112,6 +125,7 @@
                     fontFamily: 'arial'
                 },
                 dropdown: 'dropdown',
+                // class 는 json key 에 적용할 class 명을 적고, value 에 class 적용 여부
                 toggle: {
                     on: true
                 }
@@ -134,6 +148,7 @@
                 counter: 0
             };
         },
+        // methods 라는 json 을 만들어서, 그 안에 선언
         methods: {
             add() {
                 this.counter ++;
@@ -146,7 +161,6 @@
             }
         }
     });
-
 
     let app3 = new Vue({
         el: '#app3',
@@ -172,7 +186,9 @@
         }
     });
 
-    @* image 와 간단한 설명을 ul / li list 로 display *@
+    //image 와 간단한 설명을 ul / li list 로 display
+    //Vue instance 를 app2 라는 변수에 assign 하면 --> 그러면 외부에서 Vue instance 내부에 접근할 수 있음 --> 좋은 방법은 아님
+    //let app2 = new Vue({
     new Vue({
         el: '#app2',
         data() {
@@ -180,6 +196,7 @@
                 items: [
                     {
                         id: 1,
+                        // 원하는 size 로 image 를 가져오는 url
                         image: 'https://picsum.photos/210/118/?image=1',
                         title: 'Computer',
                         price: '$20.00'
@@ -208,9 +225,12 @@
 
     })
 
-    @* id, password 를 type 하면, type 한 값이 바로 아래 box 에 display 되도록 함 *@
+    // new Vue 로 instance 를 만들어 사용
     new Vue({
         el: '#app1',
+        // 외부에서 사용할 data 는 data method 에 정의해서 사용
+        // 아래 data 는 화면 구성에 필요한 model 이라고 하고
+        // 위 app1 div 는 화면을 구성하는 view 라고 하고
         data() {
             return {
                 userId: '',
@@ -218,9 +238,6 @@
             }
         }
     })
-
-
-
 
     </script>
 
